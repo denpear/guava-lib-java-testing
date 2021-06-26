@@ -1,5 +1,7 @@
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -43,6 +45,22 @@ public void testListsOfGuava() {
     print(objectImmutableList);
     print(map);
 }
+
+    @Test
+    public void testOfGuavaOutput(){
+        print(Strings.commonSuffix("Задень", "Полдень"));
+        print(Strings.padEnd("Не ори на меня",20,'F'));
+        ImmutableList.Builder<String> builder = ImmutableList.builder();
+        for (int i = 0; i < 100; i++) {
+            builder.add("Денис" + i);
+        }
+        Iterable<String> list = builder.build();
+        print(Strings.repeat("_",20));
+        ImmutableList.copyOf(list)
+                .stream()
+                .map(name -> Strings.padStart(name,15,'.'))
+                .forEach(GuavaCollectionsTest::print);
+    }
 
 
 
