@@ -14,6 +14,7 @@ public class TestDevelopersSorting {
         for (Developer developer : listDevs) {
             System.out.println(developer.toString());
         }
+
         //sort by age
         Collections.sort(listDevs, new Comparator<Developer>() {
             @Override
@@ -21,13 +22,31 @@ public class TestDevelopersSorting {
                 return o1.getAge() - o2.getAge();
             }
         });
+        System.out.println("After sort by age comparator usage: ");
+        listDevs.forEach((developer)->System.out.println(developer.toString()));
+        //sort by name
+        Collections.sort(listDevs, new Comparator<Developer>() {
+            @Override
+            public int compare(Developer o1, Developer o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+        System.out.println("After sort by name comparator usage: ");
+        listDevs.forEach((developer)->System.out.println(developer.toString()));
+        //sort by salary
+        Collections.sort(listDevs, new Comparator<Developer>() {
+            @Override
+            public int compare(Developer o1, Developer o2) {
+                return o1.getSalary().compareTo(o2.getSalary());
+            }
+        });
 
-
-        System.out.println("After Sort");
-
+        System.out.println("After sort by salary comparator usage: ");
+        listDevs.forEach((developer)->System.out.println(developer.toString()));
         //lambda here!
         listDevs.sort((Developer o1, Developer o2)->o1.getAge()-o2.getAge());
 
+        System.out.println("After sort by age lambda comparator usage: ");
         //java 8 only, lambda also, to print the List
         listDevs.forEach((developer)->System.out.println(developer.toString()));
 

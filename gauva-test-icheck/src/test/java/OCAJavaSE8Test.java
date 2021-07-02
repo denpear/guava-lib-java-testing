@@ -10,19 +10,19 @@ public class OCAJavaSE8Test {
     }
 
     @Test
-    public void LineNumbers() {
+    public void lineNumbers() {
         List<String> stringArrayList = new ArrayList<String>();
         if (stringArrayList.isEmpty()) {
-            print("Пустой");
+            print("Empty");
             print(56); // 56
             print(0b11); // 3
             print(017); // 15
             print(0x1F); // 31
-        } else print("НЕ Пустой");
+        } else print("non-empty");
     }
 
     @Test
-    public void PrintImmutableString() {
+    public void printImmutableString() {
         String s = new String("ssssss");
         StringBuilder stringBuilder = new StringBuilder("bbbbbb");
         s.concat("-aaa");
