@@ -1,10 +1,11 @@
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.OptionalDouble;
-import java.util.Random;
+import java.util.*;
+import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class OCPJavaSE8Test {
 
@@ -33,4 +34,71 @@ public class OCPJavaSE8Test {
         //print(optional.orElseThrow(IllegalStateException::new));
         print(optional.orElseThrow(() -> new IllegalStateException())); //5.5, but if it was NULL, an IllegalStateException() would be thrown
     }
+
+    @Test
+    public void collectingUsingBasicCollectors(){
+        Stream<String> ohMy = Stream.of("lions", "tigers", "bears");
+        String result = ohMy.collect(Collectors.joining("; "));
+        print(result); // lions; tigers; bears
+
+        Stream<String> ohMy2 = Stream.of("lions", "tigers", "bears");
+        Double result2 = ohMy2.collect(Collectors.averagingInt(String::length));
+        print(result2); // 5.333333333333333
+
+        Stream<String> ohMy3 = Stream.of("lions", "tigers", "bears");
+        TreeSet<String> result3 = ohMy3.filter(s -> s.startsWith("t"))
+                .collect(Collectors.toCollection(TreeSet::new));
+        print(result3); // [tigers]
+    }
+
+
+    /**
+     * Обратите внимание, что предопределенные коллекторы находятся в классе Collectors, а не в классе Collector.
+     * Это обычная тема, которую вы видели в разделе Collection vs. Collections.
+     * Мы передаем предопределенный коллектор joining() в метод collect().
+     * Затем все элементы потока объединяются в строку String с указанным разделителем между каждым элементом.
+     * Очень важно передать коллектор в метод collect. Он существует для того, чтобы помогать собирать элементы.
+     * Коллектор ничего не делает сам по себе.
+     */
+
+    @Test
+    public void intoMapsCollecting(){
+        Stream<String> ohMy = Stream.of("lions", "tigers", "bears");
+        Map<String,Integer> map = ohMy.collect(Collectors.toMap(s -> s,String::length)); // Function.identity() = (s -> s)
+        print(map);
+
+        Stream<String> ohMy2 = Stream.of("lions", "tigers", "bears");
+        Map<String,Integer> map2 = ohMy2.collect(Collectors.toMap(Function.identity(),String::length)); // s -> s is the same
+        print(map2);
+
+        /**
+         * Прикольная сигнатура у метода в 3 параметра
+         *     public static <T, K, U>
+         *     Collector<T, ?, Map<K,U>> toMap(Function<? super T, ? extends K> keyMapper,
+         *                                     Function<? super T, ? extends U> valueMapper,
+         *                                     BinaryOperator<U> mergeFunction)
+         */
+
+        Stream<String> ohMy3 = Stream.of("lions", "tigers", "bears", "denis","dennis");
+        Map <Integer,String> map3 = ohMy3.collect(Collectors.toMap(String::length,k -> k,(s1,s2) -> s1 + ";" + s2));
+        print(map3);
+
+
+        /**
+         * Прикольная сигнатура у метода в 4 параметра
+         *     public static <T, K, U, M extends Map<K, U>>
+         *     Collector<T, ?, M> toMap(Function<? super T, ? extends K> keyMapper,
+         *                              Function<? super T, ? extends U> valueMapper,
+         *                              BinaryOperator<U> mergeFunction,
+         *                              Supplier<M> mapFactory)
+         */
+
+        Stream<String> ohMy4 = Stream.of("lions", "tigers", "bears", "denis","dennis");
+        Map <Integer,String> map4 = ohMy4.collect(Collectors.toMap(String::length,k -> k,(s1,s2) -> s1 + ";" + s2, TreeMap::new));
+        print(map4);
+
+    }
+
+
+
 }
