@@ -3,6 +3,8 @@ import org.junit.Test;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -92,13 +94,82 @@ public class OCPJavaSE8Test {
          *                              BinaryOperator<U> mergeFunction,
          *                              Supplier<M> mapFactory)
          */
-
+        //Map <Integer,String>
         Stream<String> ohMy4 = Stream.of("lions", "tigers", "bears", "denis","dennis");
         Map <Integer,String> map4 = ohMy4.collect(Collectors.toMap(String::length,k -> k,(s1,s2) -> s1 + ";" + s2, TreeMap::new));
         print(map4);
 
     }
 
+
+    @Test
+    public void usingGroupingCollecting(){
+        // Got Map<Integer,List<String>>
+
+        Stream<String> ohMy4 = Stream.of("lions", "tigers", "bears", "denis","dennis");
+
+        Map<Integer,List<String>> map4 = ohMy4.collect(Collectors.groupingBy(String::length));
+        print(map4);
+
+        //Got Map<Integer,Set<String>>
+
+        Stream<String> ohMy3 = Stream.of("lions", "tigers", "bears", "denis","dennis");
+
+        Map<Integer,Set<String>> map3 = ohMy3.collect(Collectors.groupingBy(String::length,Collectors.toSet()));
+        print(map3);
+
+        //Got TreeMap<Integer, Set<String>>
+        Stream<String> ohMy2 = Stream.of("lions", "tigers", "bears", "denis","dennis");
+
+        TreeMap<Integer, Set<String>> map2 = ohMy2.collect(Collectors.groupingBy(String::length, TreeMap::new, Collectors.toSet()));
+        print(map2, map2.getClass().toString());
+
+        Stream<String> ohMy = Stream.of("lions", "tigers", "bears", "denis","dennis");
+
+        TreeMap<Integer, List<String>> map = ohMy.collect(Collectors.groupingBy(String::length, TreeMap::new, Collectors.toList()));
+        print(map, map.getClass().getGenericSuperclass());
+    }
+
+    /**
+     * Partitioning is a special case of grouping. With partitioning, there are only two possible
+     * groups—true and false. Partitioning is like splitting a list into two parts.
+     * Разделение - это особый случай группировки.
+     * При разделении есть только две возможные группы - истинная и ложная.
+     * Разбиение на разделы похоже на разделение списка на две части.
+     */
+
+    @Test
+    public void usingPartitioningCollecting(){
+        Stream<String> ohMy = Stream.of("lions", "tigers", "bears");
+        Map<Boolean, List<String>> map = ohMy.collect(
+                Collectors.partitioningBy(s -> s.length() <= 7));
+        System.out.println(map); // {false=[tigers], true=[lions, bears]}
+    }
+
+
+    @Test
+    public void isStringHasSubstring(){
+        String s = "(литерал в скобках)";
+        Pattern p = Pattern.compile("(\\(.*\\))");
+        Matcher m = p.matcher(s);
+        boolean b = m.matches();
+        String is = b ? "Верно!" : "Не верно!";
+        print(is);
+
+        if (b) {print("Содержит открывающию круглую скобку");
+            if (s.contains(")")) { {print("Содержит закрывающию круглую скобку");}
+        }
+        }
+    }
+
+    @Test
+    public void usingConversionChars(){
+        String s = "(литерал в скобках)";
+
+        s.chars()
+                .mapToObj(i -> (char)i)
+                .forEach(System.out::println);
+    }
 
 
 }
