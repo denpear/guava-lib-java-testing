@@ -3,8 +3,6 @@ import org.junit.Test;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -144,22 +142,6 @@ public class OCPJavaSE8Test {
         Map<Boolean, List<String>> map = ohMy.collect(
                 Collectors.partitioningBy(s -> s.length() <= 7));
         System.out.println(map); // {false=[tigers], true=[lions, bears]}
-    }
-
-
-    @Test
-    public void isStringHasSubstring(){
-        String s = "(литерал в скобках)";
-        Pattern p = Pattern.compile("(\\(.*\\))");
-        Matcher m = p.matcher(s);
-        boolean b = m.matches();
-        String is = b ? "Верно!" : "Не верно!";
-        print(is);
-
-        if (b) {print("Содержит открывающию круглую скобку");
-            if (s.contains(")")) { {print("Содержит закрывающию круглую скобку");}
-        }
-        }
     }
 
     @Test
