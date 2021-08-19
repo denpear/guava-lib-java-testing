@@ -1,13 +1,32 @@
 package security;
 
+import denpear.javatrain.learn.security.UserKeyAlgorithm;
 import org.junit.Test;
 
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.ECGenParameterSpec;
 import java.util.Base64;
+import java.util.HashMap;
 
 public class generateSecretPairKeyTest {
+    @Test
+    public void secretPackageHandleTest() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+        HashMap<String,String> secretPackage = generateSecretPackage(UserKeyAlgorithm.valueOf("ECDSA"),512, "MySecretPhrase1");
+        System.out.printf("Public Key of %s: %s%n %s%n", "Current user on " + secretPackage.get("Algorithm") + " and initial key size "  + secretPackage.get("KeyLength")  + " bits", secretPackage.get("PublicKey")," Fingerprint: "  + secretPackage.get("Fingerprint"));
+        System.out.printf("Private Key of %s: %s%n", "Current user on " + secretPackage.get("Algorithm") + " and initial key size "  + secretPackage.get("KeyLength")  + " bits", secretPackage.get ("PrivateKey"));
+        HashMap<String,String> secretPackage2 = generateSecretPackage(UserKeyAlgorithm.valueOf("DSA"),512, "MySecretPhrase1");
+        System.out.printf("Public Key of %s: %s%n %s%n", "Current user on " + secretPackage2.get("Algorithm") + " and initial key size "  + secretPackage2.get("KeyLength")  + " bits", secretPackage2.get("PublicKey")," Fingerprint: "  + secretPackage2.get("Fingerprint"));
+        System.out.printf("Private Key of %s: %s%n", "Current user on " + secretPackage2.get("Algorithm") + " and initial key size "  + secretPackage2.get("KeyLength")  + " bits", secretPackage2.get ("PrivateKey"));
+        HashMap<String,String> secretPackage3 = generateSecretPackage(UserKeyAlgorithm.valueOf("RSA"),512, "MySecretPhrase1");
+        System.out.printf("Public Key of %s: %s%n %s%n", "Current user on " + secretPackage3.get("Algorithm") + " and initial key size "  + secretPackage3.get("KeyLength")  + " bits", secretPackage3.get("PublicKey")," Fingerprint: "  + secretPackage3.get("Fingerprint"));
+        System.out.printf("Private Key of %s: %s%n", "Current user on " + secretPackage3.get("Algorithm") + " and initial key size "  + secretPackage3.get("KeyLength")  + " bits", secretPackage3.get ("PrivateKey"));
+    }
+
+
+
+
     @Test
     public void genPairKeysAllAlgorithmTest() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
         final String pubKeySSH = "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAsuVPKUpLYSCNVIHD+e6u81IUznkDoiOvn/t56DRcutRc4OrNsZZ+Lmq49T4JCxUSmaT8PeLGS/IC946CNQzFwMh++sVoc19UUkZtRaDgiYn+HkYk8VW4IFI1dKfXomKSbX/lB+ohzLzXLVP2/UJgfBmdaE10k+6b+/Yd8YGXIeS8/Z9zToHPo0ORNSGIolgq3xMXUtfAOK/0KC6IFc/FuvuOSAG1UWup91bcm5GSXv4BWWjgFtOxCLIknYjsDah4qfrP8Olp5eUDhn/65xRcZsmRXoYe1ylhlSjJoPDFWXVs9npwqQmi3JaZtgg7xJxMu1ZcdpYxoj280zM9/6w1Lw==";
@@ -25,10 +44,51 @@ public class generateSecretPairKeyTest {
         generatePairKeys("ECDSA",512);
         generatePairKeys("ECDSA",2048);
         generatePairKeys("ECDSA",4096);
-
 */
     }
 
+
+    public static KeyPairGenerator getKeyPairGenerator(final UserKeyAlgorithm algorithm, final int keyLength, final String passphrase)
+            throws InvalidAlgorithmParameterException, NoSuchAlgorithmException {
+        KeyPairGenerator keyPairGenerator;
+        SecureRandom randomNumberGeneratorRNG = new SecureRandom();
+        long userSeed = Long.parseLong(String.valueOf(passphrase.getBytes(StandardCharsets.UTF_8).length));
+        randomNumberGeneratorRNG.setSeed(userSeed);
+
+        switch (algorithm) {
+            case RSA: case DSA:
+                keyPairGenerator = KeyPairGenerator.getInstance(algorithm.getValue());
+                keyPairGenerator.initialize(keyLength, randomNumberGeneratorRNG);
+                return keyPairGenerator;
+            case ECDSA:
+                keyPairGenerator = KeyPairGenerator.getInstance("EC");
+                keyPairGenerator.initialize(new ECGenParameterSpec("secp256k1"), randomNumberGeneratorRNG);
+                return keyPairGenerator;
+            default:
+                throw new IllegalStateException("Unexpected value: " + algorithm);
+        }
+    }
+
+    public HashMap<String,String> generateSecretPackage(final UserKeyAlgorithm algorithm, final int keyLength, final String passphrase) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+        HashMap<String,String> secretPackage = new HashMap<>();
+        KeyPairGenerator keyPairGenerator = getKeyPairGenerator(algorithm,keyLength,passphrase);
+        SecureRandom  randomNumberGeneratorRNG = new SecureRandom();
+        // setting seed
+        long userSeed = Long.parseLong(String.valueOf(passphrase.getBytes(StandardCharsets.UTF_8).length));
+        randomNumberGeneratorRNG.setSeed(userSeed);
+        keyPairGenerator.initialize(keyLength, randomNumberGeneratorRNG);
+        System.out.println(keyPairGenerator.getProvider().getName());
+        KeyPair pair = keyPairGenerator.genKeyPair();
+        String pub = getHexString(pair.getPublic().getEncoded());
+        String fingerprint = calculateFingerprint(pub);
+        String sec = getHexString(pair.getPrivate().getEncoded());
+        secretPackage.put("PublicKey", pub);
+        secretPackage.put("PrivateKey", sec);
+        secretPackage.put("Fingerprint", fingerprint);
+        secretPackage.put("Algorithm", algorithm.getValue());
+        secretPackage.put("KeyLength", String.valueOf(keyLength));
+        return secretPackage;
+    }
 
     @Test
     public void generatingKeysRSA() throws NoSuchAlgorithmException {
