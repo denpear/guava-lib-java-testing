@@ -1,9 +1,6 @@
 package denpear.javatrain.learn.security.sslcontext;
 
-import javax.net.ssl.KeyManager;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.*;
 import java.io.*;
 import java.security.*;
 import java.security.cert.CertificateException;
@@ -16,16 +13,19 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import static denpear.javatrain.learn.security.sslcontext.TrustManagersProvider.createTrustManagers;
+
 public class PEMImporter {
     //https://stackoverflow.com/questions/2138940/import-pem-into-java-key-store
 
-    public static SSLServerSocketFactory createSSLFactory(File privateKeyPem, File certificatePem, String password) throws Exception {
+    public static SSLServerSocketFactory createSSLFactory(File privateKeyPem, File certificatePem, File certificateCAFilePath, String password) throws Exception {
         final SSLContext context = SSLContext.getInstance("TLS");
         final KeyStore keystore = createKeyStore(privateKeyPem, certificatePem, password);
         final KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
         kmf.init(keystore, password.toCharArray());
         final KeyManager[] km = kmf.getKeyManagers();
-        context.init(km, null, null);
+        final TrustManager[] tm = createTrustManagers(certificateCAFilePath);
+        context.init(km, tm, null);
         return context.getServerSocketFactory();
     }
 
