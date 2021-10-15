@@ -1,4 +1,4 @@
-package denpear.javatrain.learn.security.baeldung.ssl.example.rsakeys;
+package denpear.javatrain.learn.security.sslcontext.experimentalsample.rsakeys.withinsingleapp;
 
 import denpear.javatrain.learn.security.sslcontext.PEMImporter;
 
@@ -14,11 +14,10 @@ public class RSASimpleServer {
     static void startServer (int port) throws Exception {
         final File privateKeyFilePath = new File("C:\\dev\\CODE\\TpamCrd\\lib-java-testing\\java11-sandbox\\src\\main\\resources\\keyServer.pem");
         final File certificateFilePath = new File("C:\\dev\\CODE\\TpamCrd\\lib-java-testing\\java11-sandbox\\src\\main\\resources\\certServer.pem");
-        final File certificateCAFilePath = new File("C:\\dev\\CODE\\TpamCrd\\lib-java-testing\\java11-sandbox\\src\\main\\resources\\servertruststoreRSA.jks");
-        SSLServerSocketFactory factory = PEMImporter.createSSLFactory(privateKeyFilePath, certificateFilePath, certificateCAFilePath,"password");
+        SSLServerSocketFactory factory = PEMImporter.createSSLFactory(privateKeyFilePath, certificateFilePath,"password");
 
         try (ServerSocket listener = factory.createServerSocket(port)) {
-            ((SSLServerSocket) listener).setNeedClientAuth(true);
+        //    ((SSLServerSocket) listener).setNeedClientAuth(true);
             ((SSLServerSocket) listener).setEnabledCipherSuites(
                     new String[] { "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
                             "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",

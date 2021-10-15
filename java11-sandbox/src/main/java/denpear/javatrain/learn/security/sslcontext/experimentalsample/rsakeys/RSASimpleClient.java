@@ -1,4 +1,4 @@
-package denpear.javatrain.learn.security.baeldung.ssl.example.rsakeys;
+package denpear.javatrain.learn.security.sslcontext.experimentalsample.rsakeys;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLParameters;

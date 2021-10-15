@@ -29,6 +29,16 @@ public class PEMImporter {
         return context.getServerSocketFactory();
     }
 
+    public static SSLServerSocketFactory createSSLFactory(File privateKeyPem, File certificatePem, String password) throws Exception {
+        final SSLContext context = SSLContext.getInstance("TLS");
+        final KeyStore keystore = createKeyStore(privateKeyPem, certificatePem, password);
+        final KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+        kmf.init(keystore, password.toCharArray());
+        final KeyManager[] km = kmf.getKeyManagers();
+        context.init(km, null, null);
+        return context.getServerSocketFactory();
+    }
+
     /**
      * Create a KeyStore from standard PEM files
      *
