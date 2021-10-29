@@ -1,5 +1,6 @@
 package denpear.javatrain.learn.security.sslcontext.experimentalsample.rsakeys.withinsingleapp;
 
+import denpear.javatrain.common.utils.Utilties;
 import denpear.javatrain.learn.security.sslcontext.PEMImporter;
 
 import javax.net.ssl.SSLServerSocket;
@@ -12,8 +13,8 @@ import java.net.Socket;
 //https://xakep.ru/2015/08/14/log-almighty/ - посмотреть!
 public class RSASimpleServer {
     static void startServer (int port) throws Exception {
-        final File privateKeyFilePath = new File("C:\\dev\\CODE\\TpamCrd\\lib-java-testing\\java11-sandbox\\src\\main\\resources\\keyServer.pem");
-        final File certificateFilePath = new File("C:\\dev\\CODE\\TpamCrd\\lib-java-testing\\java11-sandbox\\src\\main\\resources\\certServer.pem");
+        final File privateKeyFilePath = new File(Utilties.getContextPath("sslServerSide/keyServer.pem"));
+        final File certificateFilePath = new File(Utilties.getContextPath("sslServerSide/certServer.pem"));
         SSLServerSocketFactory factory = PEMImporter.createSSLFactory(privateKeyFilePath, certificateFilePath,"password");
 
         try (ServerSocket listener = factory.createServerSocket(port)) {
