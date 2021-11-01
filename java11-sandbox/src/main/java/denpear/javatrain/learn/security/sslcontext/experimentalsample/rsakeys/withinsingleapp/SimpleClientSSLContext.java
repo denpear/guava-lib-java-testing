@@ -1,6 +1,11 @@
 package denpear.javatrain.learn.security.sslcontext.experimentalsample.rsakeys.withinsingleapp;
 
-import javax.net.ssl.*;
+import denpear.javatrain.common.utils.Utilties;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLParameters;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +19,7 @@ import static denpear.javatrain.learn.security.sslcontext.TrustManagersProvider.
 
 public class SimpleClientSSLContext {
     static String startClient(String host, int port) throws IOException, KeyManagementException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, NoSuchProviderException {
-        final File certificateCAFilePath = new File("C:\\dev\\CODE\\TpamCrd\\lib-java-testing\\java11-sandbox\\src\\main\\resources\\clienttruststoreRSA.jks");
+        final File certificateCAFilePath = new File(Utilties.getContextPath("sslClientSide/clienttruststoreRSA.jks"));
         URL url = new URL("https://" + host + ":" + port);
         SSLContext sslContext = SSLContext.getInstance("TLSv1.3");
         sslContext.init(null, createTrustManagers(certificateCAFilePath), new SecureRandom());
