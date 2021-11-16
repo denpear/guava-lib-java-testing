@@ -18,7 +18,7 @@ openssl pkcs12 -in serverkeystoreRSA.p12  -nodes -nocerts -out keyServer.pem
 ```
 openssl pkcs12 -in serverkeystoreRSA.p12 -nodes -clcerts -out clientCertificateRSA.p12
 ```
-clientCertificateRSA.p12 - используется в запросах через curl
+clientCertificateRSA.p12 - используется в запросах через curl с ключом --cert
 
 ##Выгружаем только сертификаты ЦС (не сертификаты клиентов!).
 ```
