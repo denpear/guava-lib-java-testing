@@ -24,9 +24,9 @@ public class DSASimpleServer {
     static void startServer (int port) throws UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, KeyManagementException {
         final File privateKeyFilePath = new File(Utilties.getContextPath("sslServerSideDSA/keyDSAServer.pem"));
         final File certificateFilePath = new File(Utilties.getContextPath("sslServerSideDSA/certDSAServer.pem"));
-        SSLServerSocketFactory factory = PEMImporter.createSSLFactory(privateKeyFilePath, certificateFilePath,"password");
+        SSLServerSocketFactory factory = PEMImporter.createSSLServerSocketFactory(privateKeyFilePath, certificateFilePath,"password");
         String keyAlgo = getKeyAlgorithm(Utilties.getContextPath("sslServerSideDSA/keyDSAServer.pem"));
-        String keyAlgo1 = getKeyAlgorithm(Utilties.getContextPath("sslServerSide/keyServer.pem"));
+        String keyAlgo1 = getKeyAlgorithm(Utilties.getContextPath("sslServerSideRSA/private_key_server_folder/keyServer.pem"));
         try (ServerSocket listener = factory.createServerSocket(port)) {
         //    ((SSLServerSocket) listener).setNeedClientAuth(true);
             ((SSLServerSocket) listener).setEnabledCipherSuites(

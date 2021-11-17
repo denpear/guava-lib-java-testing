@@ -5,7 +5,7 @@
 
 
 #Решение 1 на клиенте 
-См. Пакет withinsingleapp
+См. Пакет singlemoduledapp
 *
 Главный вывод: при таком решении источником ключей и для клиента и для сервера является один и тот же jks сервера!!! Но так бывает не всегда, потому что клиенты не обязательно должны быть из одной организации.
 То есть для затравки нужен всего лишь один артефакт: пара RSA ключей для сервера, всё начинается с него, далее вокруг этих ключей генерируем всю оставшуюся инфраструктуру.
@@ -42,6 +42,16 @@ keytool -genkey -keyalg RSA -keypass password -storepass password -keystore clie
 ```
 keytool -importkeystore -srckeystore clientkeystoreRSA.jks -srcstorepass password -destkeystore client-cert-and-key.p12 -deststoretype pkcs12 -destkeypass password
 ```
+
+##Выгружаем сертификат сервера из хранилища ключей pkcs12 (-----BEGIN CERTIFICATE-----)
+```
+openssl pkcs12 -in client-cert-and-key.p12  -nokeys -out certClient.pem
+```
+##Выгружаем только закрытый ключ сервера в незашифрованном виде (-----BEGIN PRIVATE KEY-----)
+```
+openssl pkcs12 -in client-cert-and-key.p12  -nodes -nocerts -out privateKeyClient.pem
+```
+
 ##Выгружаем клиентский сертификат, который выдается самим же сервером и содержит закрытый ключ и сертификат сервера, его выдавшего (-----BEGIN PRIVATE KEY----- и -----BEGIN CERTIFICATE-----), идентификатор ключа однозначно связан с идентификатором сертификата сервера, их серийные номера идентичны.
 ```
 openssl pkcs12 -in client-cert-and-key.p12 -nodes -clcerts -out clientOuterCertificateRSA.p12

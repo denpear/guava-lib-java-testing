@@ -22,7 +22,7 @@ public class ECSimpleServer {
     static void startServer (int port) throws UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, KeyManagementException {
         final File privateKeyFilePath = new File(Utilties.getContextPath("sslServerSideEC/keyServerEC.pem"));
         final File certificateFilePath = new File(Utilties.getContextPath("sslServerSideEC/certServerEC.pem"));
-        SSLServerSocketFactory factory = PEMImporter.createSSLFactory(privateKeyFilePath, certificateFilePath,"password");
+        SSLServerSocketFactory factory = PEMImporter.createSSLServerSocketFactory(privateKeyFilePath, certificateFilePath,"password");
         try (ServerSocket listener = factory.createServerSocket(port)) {
         //    ((SSLServerSocket) listener).setNeedClientAuth(true);
             ((SSLServerSocket) listener).setEnabledCipherSuites(

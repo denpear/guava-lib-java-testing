@@ -17,9 +17,20 @@ import java.util.*;
 import static denpear.javatrain.learn.security.sslcontext.TrustManagersProvider.createTrustManagers;
 
 public class PEMImporter {
+
     //https://stackoverflow.com/questions/2138940/import-pem-into-java-key-store
 
-    public static SSLServerSocketFactory createSSLFactory(File privateKeyPem, File certificatePem, File certificateCAFilePath, String password) throws CertificateException, KeyStoreException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, UnrecoverableKeyException, NoSuchProviderException, KeyManagementException {
+    public static SSLServerSocketFactory createSSLServerSocketFactory(File privateKeyPem, File certificatePem, File certificateCAFilePath, String password) throws CertificateException, KeyStoreException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, UnrecoverableKeyException, NoSuchProviderException, KeyManagementException {
+        SSLContext context = createSslContext(privateKeyPem, certificatePem, certificateCAFilePath, password);
+        return context.getServerSocketFactory();
+    }
+
+    public static SSLSocketFactory createSSLSocketFactory(File privateKeyPem, File certificatePem, File certificateCAFilePath, String password) throws CertificateException, KeyStoreException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, UnrecoverableKeyException, NoSuchProviderException, KeyManagementException {
+        SSLContext context = createSslContext(privateKeyPem, certificatePem, certificateCAFilePath, password);
+        return context.getSocketFactory();
+    }
+
+    private static SSLContext createSslContext(File privateKeyPem, File certificatePem, File certificateCAFilePath, String password) throws NoSuchAlgorithmException, KeyStoreException, IOException, CertificateException, InvalidKeySpecException, UnrecoverableKeyException, NoSuchProviderException, KeyManagementException {
         final SSLContext context = SSLContext.getInstance("TLS");
         final KeyStore keystore = createKeyStore(privateKeyPem, certificatePem, password);
         final KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
@@ -27,10 +38,10 @@ public class PEMImporter {
         final KeyManager[] km = kmf.getKeyManagers();
         final TrustManager[] tm = createTrustManagers(certificateCAFilePath);
         context.init(km, tm, null);
-        return context.getServerSocketFactory();
+        return context;
     }
 
-    public static SSLServerSocketFactory createSSLFactory(File privateKeyPem, File certificatePem, String password) throws CertificateException, KeyStoreException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, UnrecoverableKeyException, KeyManagementException {
+    public static SSLServerSocketFactory createSSLServerSocketFactory(File privateKeyPem, File certificatePem, String password) throws CertificateException, KeyStoreException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, UnrecoverableKeyException, KeyManagementException {
         final SSLContext context = SSLContext.getInstance("TLS");
         final KeyStore keystore = createKeyStore(privateKeyPem, certificatePem, password);
         final KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");

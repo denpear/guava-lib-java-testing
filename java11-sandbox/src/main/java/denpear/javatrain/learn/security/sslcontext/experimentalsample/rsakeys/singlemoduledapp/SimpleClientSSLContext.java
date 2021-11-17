@@ -1,26 +1,32 @@
-package denpear.javatrain.learn.security.sslcontext.experimentalsample.rsakeys.withinsingleapp;
+package denpear.javatrain.learn.security.sslcontext.experimentalsample.rsakeys.singlemoduledapp;
 
 import denpear.javatrain.common.utils.Utilties;
-import denpear.javatrain.learn.security.sslcontext.PEMImporter;
 
-import javax.net.ssl.SSLServerSocket;
-import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLParameters;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
+import java.net.URL;
+import java.security.*;
+import java.security.cert.CertificateException;
 
-//https://xakep.ru/2015/08/14/log-almighty/ - посмотреть!
-public class RSASimpleServer {
-    static void startServer (int port) throws Exception {
-        final File privateKeyFilePath = new File(Utilties.getContextPath("sslServerSide/keyServer.pem"));
-        final File certificateFilePath = new File(Utilties.getContextPath("sslServerSide/certServer.pem"));
-        SSLServerSocketFactory factory = PEMImporter.createSSLFactory(privateKeyFilePath, certificateFilePath,"password");
+import static denpear.javatrain.learn.security.sslcontext.TrustManagersProvider.createTrustManagers;
 
-        try (ServerSocket listener = factory.createServerSocket(port)) {
-        //    ((SSLServerSocket) listener).setNeedClientAuth(true);
-            ((SSLServerSocket) listener).setEnabledCipherSuites(
-                    new String[] { "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
+public class SimpleClientSSLContext {
+    static String startClient(String host, int port) throws IOException, KeyManagementException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, NoSuchProviderException {
+        final File certificateCAFilePath = new File(Utilties.getContextPath("sslClientSide/keystores_client_folder/truststore/clienttruststoreRSA.jks"));
+        URL url = new URL("https://" + host + ":" + port);
+        SSLContext sslContext = SSLContext.getInstance("TLSv1.3");
+        sslContext.init(null, createTrustManagers(certificateCAFilePath), new SecureRandom());
+        SSLSocketFactory socketFactory = sslContext.getSocketFactory();
+        try (Socket connection = socketFactory.createSocket(host, port)) {
+            ((SSLSocket) connection).setEnabledCipherSuites(
+                    new String[] {"TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
                             "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
                             "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
                             "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
@@ -70,18 +76,17 @@ public class RSASimpleServer {
                             //                          "TLS_AES_128_CCM_SHA256", //Unsupported CipherSuite
                             //                   "TLS_AES_128_CCM_8_SHA256" //Unsupported CipherSuite
                     });
-            ((SSLServerSocket) listener).setEnabledProtocols(
-              new String[] { "TLSv1","TLSv1.1","TLSv1.2","TLSv1.3"});
-            while (true) {
-                try (Socket socket = listener.accept()) {
-                    PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                    out.println("Hello World!");
-                }
-            }
+            ((SSLSocket) connection).setEnabledProtocols(
+                    new String[] { "TLSv1","TLSv1.1","TLSv1.2","TLSv1.3"});
+            SSLParameters sslParams = new SSLParameters();
+    //        sslParams.setEndpointIdentificationAlgorithm("HTTPS");
+            ((SSLSocket) connection).setSSLParameters(sslParams);
+            BufferedReader input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            return input.readLine();
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        startServer(8443);
+    public static void main(String[] args) throws IOException, NoSuchAlgorithmException, KeyManagementException, UnrecoverableKeyException, CertificateException, KeyStoreException, NoSuchProviderException {
+        System.out.println(startClient("localhost", 8443));
     }
 }
