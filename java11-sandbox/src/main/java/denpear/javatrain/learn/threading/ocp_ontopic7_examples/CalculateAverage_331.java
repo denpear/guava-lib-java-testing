@@ -1,4 +1,4 @@
-package denpear.javatrain.learn.threading.ocp_ontopic_examples;
+package denpear.javatrain.learn.threading.ocp_ontopic7_examples;
 
 public class CalculateAverage_331 implements Runnable {
     private double[] scores;

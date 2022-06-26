@@ -1,4 +1,4 @@
-package denpear.javatrain.learn.threading.ocp_ontopic_examples;
+package denpear.javatrain.learn.threading.ocp_ontopic7_examples;
 
 // + sleep()
 public class CheckResults_2_335 {

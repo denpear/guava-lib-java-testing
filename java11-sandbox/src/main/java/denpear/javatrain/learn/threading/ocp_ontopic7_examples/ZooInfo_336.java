@@ -1,4 +1,4 @@
-package denpear.javatrain.learn.threading.ocp_ontopic_examples;
+package denpear.javatrain.learn.threading.ocp_ontopic7_examples;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

@@ -1,4 +1,4 @@
-package denpear.javatrain.learn.threading.ocp_ontopic_examples;
+package denpear.javatrain.learn.threading.ocp_ontopic7_examples;
 
 public class CheckResults_1_334 {
     private static int counter = 0;

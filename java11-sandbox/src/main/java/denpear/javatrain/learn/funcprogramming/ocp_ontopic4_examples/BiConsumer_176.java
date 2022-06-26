@@ -1,10 +1,10 @@
-package denpear.javatrain.funcprogramming;
+package denpear.javatrain.learn.funcprogramming.ocp_ontopic4_examples;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-public class BiConsumerTest {
+public class BiConsumer_176 {
 
     public static void main(String[] args) {
         Map<String, Integer> map = new HashMap<>();

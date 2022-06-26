@@ -28,11 +28,11 @@ public class CharCombination {
         }
 
         for (Character c : possible) {
+            charComb[indexCharArray] = c;// перебираем не цифры, а индексы
             if (indexCharArray > 0) {
                 if (charComb[indexCharArray] == charComb[indexCharArray - 1]) continue; //238328 итераций за счет
                 // требования уникальности какждого символа в пароле уменьшились до 41492
             }
-            charComb[indexCharArray] = c;// перебираем не цифры, а индексы
             recursiveGenMyPassWord(indexCharArray + 1, passwordSize);
         }
     }
