@@ -1,4 +1,4 @@
-package denpear.javatrain.learn.threading.ocp_review_tests;
+package denpear.javatrain.learn.threading.ocp_review7_tests;
 
 
 import java.util.ArrayList;
