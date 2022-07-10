@@ -11,11 +11,12 @@ class TopUniqueWordCounter {
      * Слово это последовательность непробельных символов. Нужно посчитать кол-во уникальных слов без учета регистра в
      * тексте представленным коллекций <code>lines</code>. Вернуть <code>topN</code> cамых часто используемых
      * <p>
-     * Порядок построения решения при livecording: источник (структура) - данных в точке останова - решение
-     * 1) задуматься как получить в ошжидаемый интервьюьером метод искомую структутру данных, а уже потом набор тестовых даннных
-     * 2) Зафиксировать точку останова с тестовыми данными в проектирокуемом методе
-     * 3) С этого момента можно оценить степень сложности разных подходов к решению
-     * 4) Можно начинать гуглить узловые шаги схемы решения проблемы
+     * Порядок построения решения при livecording: источник (структура) - данных в точке останова - план решения - решение
+     * 1) задуматься как получить в ожидаемый интервьюьером метод искомую структутру данных, а уже потом набор тестовых даннных
+     * 2) Зафиксировать точку останова с тестовыми данными в проектирокуемом методе, БЕЗ ПАРАМЕТРИЗОВАННЫХ ТЕСТОВ!
+     * 3) Четкий план решения готовим на бумаге
+     * 4) С этого момента можно оценить степень сложности разных подходов к решению
+     * 5) Можно начинать гуглить узловые шаги схемы решения проблемы
      */
 
     public static Map<String, Long> count(Collection<String> lines, int topN) {
@@ -28,8 +29,31 @@ class TopUniqueWordCounter {
                 String term = array[i];
                 incrementTermCount(term);
             }
-            // TODO: 30.06.2022 Вывести сортировкой top 10
         }
+        List<Long> populer = map.entrySet().stream().map(stringLongEntry -> stringLongEntry.getValue()).sorted().collect(Collectors.toList())
+                .subList(map.size() - 2, map.size()); // тут слепые Long
+
+        //Способ №1 Сортировка Map в Stream
+        map.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .map(stringLongEntry -> stringLongEntry.getKey()).collect(Collectors.toList()).subList(0, 2);
+
+        //Способ №2 Сортировка Map в Stream ссылка на метод c выводом двух часто встречающихся
+        map.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .map(Map.Entry::getKey).collect(Collectors.toList()).subList(0, 2).stream().forEach(System.out::println);
+
+        //Способ №3 Сортировка Map через loop
+        List<Map.Entry<String, Long>> toSort = new ArrayList<>();
+        for (Map.Entry<String, Long> stringLongEntry : map.entrySet()) {
+            toSort.add(stringLongEntry);
+        }
+        toSort.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+        List<String> list = new ArrayList<>();
+        for (Map.Entry<String, Long> stringLongEntry : toSort) {
+            String key = stringLongEntry.getKey();
+            list.add(key);
+        }
+        list.subList(0, 2);
+
         return map;
     }
 
