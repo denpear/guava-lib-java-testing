@@ -20,11 +20,13 @@ class TopUniqueWordCounter_3 {
      */
 
     public static Map<String, Long> count(Collection<String> lines, int topN) {
-        // сначала разбиваем текст на строки, строки на слова: Функция mapper, переданная в flatMap,
+        // Фокус 1): сначала разбиваем текст на строки, строки на слова: Функция mapper, переданная в flatMap,
         // разбивает строку с помощью простого регулярного выражения на массив слов, а затем создает поток слов из этого массива.
-        // сортировка Map в Stream ссылка на метод c выводом двух часто встречающихся
+        // Фокус 2): что можно считать повторения при помощи комбинации Collectors.counting() внутри Collectors.groupingBy
+        // Фокус 3): сортировка Map в обратном порядке по значению Long в Словаре
+        // Фокус 4): как резать Map при помощи limit()
         map = lines.stream().flatMap(line -> Stream.of(line.split("\\s+"))).collect(Collectors.groupingBy(word -> word, Collectors.counting()));
-        map.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(10).forEach(System.out::println);
+        map.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(topN).forEach(System.out::println);
         return map;
     }
 
