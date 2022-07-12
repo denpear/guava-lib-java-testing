@@ -97,9 +97,8 @@ public class CreateIntStream {
 
     @Test
     public void getMinInt() {
-        // найти минимальное число
-        int anInt = IntStream.range(1, 5).min().getAsInt();
-        System.out.println(anInt);
+        // найти минимальное число, но учитывая замечания по Optional о min()
+        IntStream.range(1, 5).min().ifPresent(System.out::println);
     }
 
 

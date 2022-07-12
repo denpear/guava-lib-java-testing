@@ -78,4 +78,13 @@ public class FlatMapTests {
     }
 
 
+    @Test
+    public void getStringStreamFromGenerate() {
+        Stream.generate(() -> "Elsa")
+                .filter(n -> n.length() == 4)
+                .limit(2)
+                .sorted()
+                .forEach(System.out::println);
+    }
+
 }
