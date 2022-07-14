@@ -1,4 +1,4 @@
-package denpear.javatrain.learn.algorithms.skillbox.recursion;
+package denpear.javatrain.learn.algorithms.recursion;
 
 public class PowerIntegerValue {
     /* рекурсивное возведение в степень */

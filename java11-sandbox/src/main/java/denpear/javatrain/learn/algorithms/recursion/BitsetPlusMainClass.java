@@ -1,4 +1,4 @@
-package denpear.javatrain.learn.algorithms.skillbox.recursion;
+package denpear.javatrain.learn.algorithms.recursion;
 
 class BitsetPlusMainClass {
     int[] bitData;

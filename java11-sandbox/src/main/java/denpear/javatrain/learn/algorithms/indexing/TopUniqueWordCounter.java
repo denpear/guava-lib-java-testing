@@ -1,4 +1,4 @@
-package denpear.javatrain.learn.algorithms.skillbox.indexing;
+package denpear.javatrain.learn.algorithms.indexing;
 
 import java.util.*;
 import java.util.stream.Collectors;
