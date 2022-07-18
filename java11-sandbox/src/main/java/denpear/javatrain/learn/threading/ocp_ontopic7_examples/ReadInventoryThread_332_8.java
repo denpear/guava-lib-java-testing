@@ -1,19 +1,19 @@
 package denpear.javatrain.learn.threading.ocp_ontopic7_examples;
 
-public class ReadInventoryThread_332 extends Thread {
+public class ReadInventoryThread_332_8 extends Thread {
     /**
      * В этом примере используется в общей сложности четыре потока - пользовательский поток main()
      * и три дополнительных потока, созданных методом main(). Хотя порядок выполнения потоков после их запуска является неопределенным,
      * порядок внутри одного потока остается линейным.
-     * Например, цикл for() в PrintData по-прежнему упорядочен, так же как и end, появляющийся после begin в методе main().
+     * Например, цикл for() в PrintData_332_8 по-прежнему упорядочен, так же как и end, появляющийся после begin в методе main().
      *
      * @param args
      */
     public static void main(String[] args) {
         System.out.println("begin");
-        (new ReadInventoryThread_332()).start();
-        (new Thread(new PrintData())).start();
-        (new ReadInventoryThread_332()).start();
+        (new ReadInventoryThread_332_8()).start();
+        (new Thread(new PrintData_332_8())).start();
+        (new ReadInventoryThread_332_8()).start();
         System.out.println("end");
     }
 

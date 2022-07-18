@@ -1,8 +1,8 @@
 package denpear.javatrain.learn.threading.ocp_ontopic7_examples;
 
-public class PrintData implements Runnable {
+public class PrintData_332_8 implements Runnable {
     public static void main(String[] args) {
-        (new Thread(new PrintData())).start();
+        (new Thread(new PrintData_332_8())).start();
     }
 
     /**

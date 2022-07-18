@@ -3,7 +3,7 @@ package denpear.javatrain.learn.threading.ocp_ontopic7_examples;
 
 import java.util.concurrent.*;
 
-public class CheckResults_3_341 {
+public class CheckResults_3_341_17 {
     private static int counter = 0;
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
@@ -12,7 +12,7 @@ public class CheckResults_3_341 {
             executorService = Executors.newSingleThreadExecutor();
             Future<?> result = executorService.submit(() -> {
                 for (int i = 0; i < 500; i++) {
-                    CheckResults_3_341.counter++;
+                    CheckResults_3_341_17.counter++;
                 }
             });
             result.get(10, TimeUnit.SECONDS);

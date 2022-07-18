@@ -1,18 +1,16 @@
 package denpear.javatrain.learn.threading.ocp_ontopic7_examples;
 
-// + sleep()
-public class CheckResults_2_335 {
+public class CheckResults_1_334_10 {
     private static int counter = 0;
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         new Thread(() -> {
-            for (int i = 0; i < 1000; i++) {
-                CheckResults_2_335.counter++;
+            for (int i = 0; i < 700; i++) {
+                CheckResults_1_334_10.counter++;
             }
         }).start();
-        while (CheckResults_2_335.counter < 100) {
+        while (CheckResults_1_334_10.counter < 100) {
             System.out.println("Еще не достигнут предел");
-            Thread.sleep(1000);
         }
         System.out.println("Достигнуто!");
     }
