@@ -1,8 +1,6 @@
 package denpear.javatrain.learn.algorithms.sorting;
 
 import java.util.Arrays;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.IntStream;
 
 /**
  * Название	            Лучшее время	Среднее	Худшее	Память	Устойчивость	Обмены (в среднем)
@@ -69,7 +67,8 @@ public class BubbleSort {
 
 
     public static void main(String[] args) {
-        int[] ints = IntStream.generate(() -> ThreadLocalRandom.current().nextInt(1000)).limit(6).toArray();
+        int[] ints = {4, 2, 1, 5, 3};
+        // int[] ints = IntStream.generate(() -> ThreadLocalRandom.current().nextInt(1000)).limit(6).toArray();
         BubbleSort.bubbleSort(ints);
     }
 
