@@ -50,6 +50,12 @@ class LambdaDemo {
 
     }
 
+    /**
+     * Функциональный интерфейс м. заменить лямбдой, если метод ожидает его как параметр.
+     * Т.е. в параметре метода при вызове может оказаться лямбда-выражение
+     *
+     * @param myFuncInterface
+     */
     public void lambda(MyFuncInterface myFuncInterface) {
         myFuncInterface.doSmth();
     }
