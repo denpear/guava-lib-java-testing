@@ -1,7 +1,6 @@
 package denpear.javatrain.interview.codereview;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * Данные о платеже
@@ -22,6 +21,39 @@ public class PaymentDto implements Comparable<PaymentDto>, Serializable {
     public String getDescription() {
         return description;
     }
+/*
+   //автогенерация Guava та же, что и Java 7+, только ограничение по notnull description не запрашивается
+   // Objects.equals(this.description,that.description); // нужно применять в случае nullable объектов
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PaymentDto)) return false;
+        PaymentDto that = (PaymentDto) o;
+        return Objects.equal(description, that.description) && Objects.equal(type, that.type) && Objects.equal(paymentAmount, that.paymentAmount);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(description, type, paymentAmount);
+    }*/
+
+    /*
+    // автогенерация от Java 7+ потому что указано было, что description мб нулевым
+    // Objects.equals(this.description,that.description); // нужно применять в случае nullable объектов
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PaymentDto)) return false;
+        PaymentDto that = (PaymentDto) o;
+        return Objects.equals(description, that.description) && type.equals(that.type) && paymentAmount.equals(that.paymentAmount);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(description, type, paymentAmount);
+    }
+*/
 
     /**
      * Установить описание платежа
@@ -84,6 +116,38 @@ public class PaymentDto implements Comparable<PaymentDto>, Serializable {
         return Boolean.TRUE;
     }
 
+    // Из книги про Hibernate
+
+    /**
+     * Java определяет два различных понятия тождественности:
+     * 1) идентичность экземпляров (грубо говоря, совпадение адресов в памяти;
+     * проверяется как a == b);
+     * 2) равенство экземпляров, определяемое методом equals() (также называется равенством по значению).
+     * 3) Objects.equals(this.description,that.description); // нужно применять в случае nullable (мб нулевыми, так в коде) объектов
+     */
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PaymentDto that = (PaymentDto) o;
+        if (!this.paymentAmount.equals(that.paymentAmount)) return false;
+        if (!this.type.equals(that.type)) return false;
+        return true;
+    }
+
+    // Из книги про Hibernate
+    @Override
+    public int hashCode() {
+        int result = paymentAmount.hashCode();
+        result = 31 * result + this.type.hashCode();
+        return result;
+    }
+/*
+    //Было так, но:
+    // 1) описание может быть необязательным
+    // 2) в хеш-код лучше загонять Immutable Objects
+    // 3)
     @Override
     public boolean equals(Object o) {
         PaymentDto that = (PaymentDto) o;
@@ -93,7 +157,7 @@ public class PaymentDto implements Comparable<PaymentDto>, Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(description, type, paymentAmount);
-    }
+    }*/
 
     @Override
     public String toString() {

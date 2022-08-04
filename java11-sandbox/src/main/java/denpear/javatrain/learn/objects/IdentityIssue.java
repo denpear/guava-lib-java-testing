@@ -28,7 +28,7 @@ public class IdentityIssue {
 
         String string1 = "a"; // механизм интернирования?
         String string2 = "a";
-        System.out.println(string1 == string2); //true - т.к. береться из пула строк, вель мы не используем ключевое слово new String
+        System.out.println(string1 == string2); //true - т.к. береться из пула строк, ведь мы не используем ключевое слово new для созадения объекта String
         System.out.println(string1.equals(string2)); //true - т.к. состояние обектов объективно  одинаковое
 
 
