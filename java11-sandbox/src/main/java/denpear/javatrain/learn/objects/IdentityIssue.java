@@ -26,6 +26,11 @@ public class IdentityIssue {
         System.out.println(integer1 == integer2); //false
         System.out.println(integer1.equals(integer2)); //true - т.к. состояние обектов объективно  одинаковое
 
+        Integer integer3 = 48;
+        Integer integer4 = 48;
+        System.out.println(integer3 == integer4); //false
+        System.out.println(integer3.equals(integer4));
+
         String string1 = "a"; // механизм интернирования?
         String string2 = "a";
         System.out.println(string1
