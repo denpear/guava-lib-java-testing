@@ -26,7 +26,7 @@ public class DSASimpleServer {
         final File certificateFilePath = new File(Utilties.getContextPath("sslServerSideDSA/certDSAServer.pem"));
         SSLServerSocketFactory factory = PEMImporter.createSSLServerSocketFactory(privateKeyFilePath, certificateFilePath,"password");
         String keyAlgo = getKeyAlgorithm(Utilties.getContextPath("sslServerSideDSA/keyDSAServer.pem"));
-        String keyAlgo1 = getKeyAlgorithm(Utilties.getContextPath("sslServerSideRSA/private_key_server_folder/keyServer.pem"));
+        String keyAlgo1 = getKeyAlgorithm(Utilties.getContextPath("sslServerSideRSA/server_private_key_folder/keyServer.pem"));
         try (ServerSocket listener = factory.createServerSocket(port)) {
         //    ((SSLServerSocket) listener).setNeedClientAuth(true);
             ((SSLServerSocket) listener).setEnabledCipherSuites(

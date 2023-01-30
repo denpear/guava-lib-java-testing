@@ -19,7 +19,7 @@ public class UniClientSSLContext {
     static String startClient(String host, int port) throws IOException, KeyManagementException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, NoSuchProviderException, InvalidKeySpecException {
         final File privateKeyFilePath = new File(Utilties.getContextPath("sslClientSide/private_key_client_folder/privateKeyClient.pem"));
         final File certificateFilePath = new File(Utilties.getContextPath("sslClientSide/certificate_client_folder/certClient.pem"));
-        final File certificateCAFilePath = new File(Utilties.getContextPath("sslClientSide/keystores_client_folder/truststore/clienttruststoreRSA.jks"));
+        final File certificateCAFilePath = new File(Utilties.getContextPath("sslClientSide/client_stores_folder/truststore/clienttruststoreRSA.jks"));
         SSLSocketFactory socketFactory = PEMImporter.createSSLSocketFactory(privateKeyFilePath, certificateFilePath, certificateCAFilePath,"password");
 
         try (Socket connection = socketFactory.createSocket(host, port)) {

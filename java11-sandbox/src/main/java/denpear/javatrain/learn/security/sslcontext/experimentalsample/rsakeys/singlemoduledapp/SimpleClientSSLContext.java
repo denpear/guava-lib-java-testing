@@ -19,7 +19,7 @@ import static denpear.javatrain.learn.security.sslcontext.TrustManagersProvider.
 
 public class SimpleClientSSLContext {
     static String startClient(String host, int port) throws IOException, KeyManagementException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, NoSuchProviderException {
-        final File certificateCAFilePath = new File(Utilties.getContextPath("sslClientSide/keystores_client_folder/truststore/clienttruststoreRSA.jks"));
+        final File certificateCAFilePath = new File(Utilties.getContextPath("sslClientSide/client_stores_folder/truststore/clienttruststoreRSA.jks"));
         URL url = new URL("https://" + host + ":" + port);
         SSLContext sslContext = SSLContext.getInstance("TLSv1.3");
         sslContext.init(null, createTrustManagers(certificateCAFilePath), new SecureRandom());

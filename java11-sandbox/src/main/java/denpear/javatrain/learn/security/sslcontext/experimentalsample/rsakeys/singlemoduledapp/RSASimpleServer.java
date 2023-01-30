@@ -13,8 +13,8 @@ import java.net.Socket;
 //https://xakep.ru/2015/08/14/log-almighty/ - посмотреть!
 public class RSASimpleServer {
     static void startServer (int port) throws Exception {
-        final File privateKeyFilePath = new File(Utilties.getContextPath("sslServerSideRSA/private_key_server_folder/keyServer.pem"));
-        final File certificateFilePath = new File(Utilties.getContextPath("sslServerSideRSA/certificate_server_folder/certServer.pem"));
+        final File privateKeyFilePath = new File(Utilties.getContextPath("sslServerSideRSA/server_private_key_folder/keyServer.pem"));
+        final File certificateFilePath = new File(Utilties.getContextPath("sslServerSideRSA/server_certificate_folder/certServer.pem"));
         SSLServerSocketFactory factory = PEMImporter.createSSLServerSocketFactory(privateKeyFilePath, certificateFilePath,"password");
 
         try (ServerSocket listener = factory.createServerSocket(port)) {
