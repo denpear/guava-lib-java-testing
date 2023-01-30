@@ -16,7 +16,7 @@
 
 ##Выгружаем клиентский сертификат, который выдается самим же сервером и содержит закрытый ключ и сертификат сервера, его выдавшего (-----BEGIN PRIVATE KEY----- и -----BEGIN CERTIFICATE-----)
 ```
-openssl pkcs12 -in serverkeystoreRSA.p12 -nodes -clcerts -out clientCertificateRSA.p12
+openssl pkcs12 -in serverkeystoreRSA.p12 -nodes -clcerts -out clientCertificateRSA.~~p12~~
 ```
 clientCertificateRSA.p12 - используется в запросах через curl с ключом --cert
 
@@ -36,18 +36,25 @@ openssl pkcs12 -export -out client-mysandbox-identity.p12 -inkey keyServer.pem -
 
 ##Генерируем пару RSA ключей и кладем их в хранилище ключей
 ```
+Depricated:
 keytool -genkey -keyalg RSA -keypass password -storepass password -keystore clientkeystoreRSA.jks
+
+New one:
+
+keytool -genkeypair -keyalg RSA -keypass password -storepass password -keystore clientkeystoreRSA.jks -alias myRSA2023 -validity 10000
+
 ```
 ##Переводим keystore в формат pkcs12
 ```
 keytool -importkeystore -srckeystore clientkeystoreRSA.jks -srcstorepass password -destkeystore client-cert-and-key.p12 -deststoretype pkcs12 -destkeypass password
 ```
 
-##Выгружаем сертификат сервера из хранилища ключей pkcs12 (-----BEGIN CERTIFICATE-----)
+##Выгружаем сертификат сервера из хранилища ключей pkcs12 (-----BEGIN CERTIFICATE-----), далее руками удалить секцию с Bag Attributes, 
+либо в kse 522 Export > Export Certificate Chain  в формате x.509 (PEM), по умолчанию расширение .cer
 ```
 openssl pkcs12 -in client-cert-and-key.p12  -nokeys -out certClient.pem
 ```
-##Выгружаем только закрытый ключ сервера в незашифрованном виде (-----BEGIN PRIVATE KEY-----)
+##Выгружаем только закрытый ключ сервера в незашифрованном виде (-----BEGIN PRIVATE KEY-----), далее руками удалить секцию с Bag Attributes
 ```
 openssl pkcs12 -in client-cert-and-key.p12  -nodes -nocerts -out privateKeyClient.pem
 ```
