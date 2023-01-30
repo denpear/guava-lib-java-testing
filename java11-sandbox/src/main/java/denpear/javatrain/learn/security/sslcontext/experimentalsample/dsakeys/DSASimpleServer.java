@@ -22,10 +22,10 @@ import static denpear.javatrain.learn.security.sslcontext.PEMImporter.getKeyAlgo
 //https://xakep.ru/2015/08/14/log-almighty/ - посмотреть!
 public class DSASimpleServer {
     static void startServer (int port) throws UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, KeyManagementException {
-        final File privateKeyFilePath = new File(Utilties.getContextPath("sslServerSideDSA/keyDSAServer.pem"));
-        final File certificateFilePath = new File(Utilties.getContextPath("sslServerSideDSA/certDSAServer.pem"));
+        final File privateKeyFilePath = new File(Utilties.getContextPath("sslServerSideDSA/server_private_key_folder/keyDSAServer.pem"));
+        final File certificateFilePath = new File(Utilties.getContextPath("sslServerSideDSA/server_certificate_folder/certDSAServer.pem"));
         SSLServerSocketFactory factory = PEMImporter.createSSLServerSocketFactory(privateKeyFilePath, certificateFilePath,"password");
-        String keyAlgo = getKeyAlgorithm(Utilties.getContextPath("sslServerSideDSA/keyDSAServer.pem"));
+        String keyAlgo = getKeyAlgorithm(Utilties.getContextPath("sslServerSideDSA/server_private_key_folder/keyDSAServer.pem"));
         String keyAlgo1 = getKeyAlgorithm(Utilties.getContextPath("sslServerSideRSA/server_private_key_folder/keyServer.pem"));
         try (ServerSocket listener = factory.createServerSocket(port)) {
         //    ((SSLServerSocket) listener).setNeedClientAuth(true);
